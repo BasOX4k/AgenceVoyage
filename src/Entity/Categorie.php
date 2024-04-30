@@ -3,6 +3,8 @@
 namespace App\Entity;
 
 use App\Repository\CategorieRepository;
+use Doctrine\Common\Collections\ArrayCollection;
+use Doctrine\Common\Collections\Collection;
 use Doctrine\DBAL\Types\Types;
 use Doctrine\ORM\Mapping as ORM;
 
@@ -22,6 +24,17 @@ class Categorie
 
     #[ORM\Column(type: Types::DATETIME_MUTABLE)]
     private ?\DateTimeInterface $duree = null;
+
+    /**
+     * @var Collection<int, Voyage>
+     */
+    #[ORM\ManyToMany(targetEntity: Voyage::class, mappedBy: 'Categorie')]
+    private Collection $voyages;
+
+    public function __construct()
+    {
+        $this->voyages = new ArrayCollection();
+    }
 
     public function getId(): ?int
     {
@@ -60,6 +73,33 @@ class Categorie
     public function setDuree(\DateTimeInterface $duree): static
     {
         $this->duree = $duree;
+
+        return $this;
+    }
+
+    /**
+     * @return Collection<int, Voyage>
+     */
+    public function getVoyages(): Collection
+    {
+        return $this->voyages;
+    }
+
+    public function addVoyage(Voyage $voyage): static
+    {
+        if (!$this->voyages->contains($voyage)) {
+            $this->voyages->add($voyage);
+            $voyage->addCategorie($this);
+        }
+
+        return $this;
+    }
+
+    public function removeVoyage(Voyage $voyage): static
+    {
+        if ($this->voyages->removeElement($voyage)) {
+            $voyage->removeCategorie($this);
+        }
 
         return $this;
     }

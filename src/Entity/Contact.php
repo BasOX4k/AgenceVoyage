@@ -28,6 +28,9 @@ class Contact
     #[ORM\Column(length: 255)]
     private ?string $commentaire = null;
 
+    #[ORM\ManyToOne(inversedBy: 'Contact')]
+    private ?Statut $statut = null;
+
     public function getId(): ?int
     {
         return $this->id;
@@ -89,6 +92,18 @@ class Contact
     public function setCommentaire(string $commentaire): static
     {
         $this->commentaire = $commentaire;
+
+        return $this;
+    }
+
+    public function getStatut(): ?Statut
+    {
+        return $this->statut;
+    }
+
+    public function setStatut(?Statut $statut): static
+    {
+        $this->statut = $statut;
 
         return $this;
     }

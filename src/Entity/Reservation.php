@@ -25,6 +25,12 @@ class Reservation
     #[ORM\Column]
     private ?int $telephone = null;
 
+    #[ORM\ManyToOne(inversedBy: 'Reservation')]
+    private ?Voyage $voyage = null;
+
+    #[ORM\ManyToOne(inversedBy: 'Reservation')]
+    private ?Statut $statut = null;
+
     public function getId(): ?int
     {
         return $this->id;
@@ -74,6 +80,30 @@ class Reservation
     public function setTelephone(int $telephone): static
     {
         $this->telephone = $telephone;
+
+        return $this;
+    }
+
+    public function getVoyage(): ?Voyage
+    {
+        return $this->voyage;
+    }
+
+    public function setVoyage(?Voyage $voyage): static
+    {
+        $this->voyage = $voyage;
+
+        return $this;
+    }
+
+    public function getStatut(): ?Statut
+    {
+        return $this->statut;
+    }
+
+    public function setStatut(?Statut $statut): static
+    {
+        $this->statut = $statut;
 
         return $this;
     }
