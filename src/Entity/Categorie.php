@@ -22,14 +22,16 @@ class Categorie
     #[ORM\Column(length: 255)]
     private ?string $evenement = null;
 
-    #[ORM\Column(type: Types::DATETIME_MUTABLE)]
-    private ?\DateTimeInterface $duree = null;
+    
 
     /**
      * @var Collection<int, Voyage>
      */
     #[ORM\ManyToMany(targetEntity: Voyage::class, mappedBy: 'Categorie')]
     private Collection $voyages;
+
+    #[ORM\Column(type: Types::DATE_MUTABLE)]
+    private ?\DateTimeInterface $Duree = null;
 
     public function __construct()
     {
@@ -65,17 +67,6 @@ class Categorie
         return $this;
     }
 
-    public function getDuree(): ?\DateTimeInterface
-    {
-        return $this->duree;
-    }
-
-    public function setDuree(\DateTimeInterface $duree): static
-    {
-        $this->duree = $duree;
-
-        return $this;
-    }
 
     /**
      * @return Collection<int, Voyage>
@@ -100,6 +91,18 @@ class Categorie
         if ($this->voyages->removeElement($voyage)) {
             $voyage->removeCategorie($this);
         }
+
+        return $this;
+    }
+
+    public function getDuree(): ?\DateTimeInterface
+    {
+        return $this->Duree;
+    }
+
+    public function setDuree(\DateTimeInterface $Duree): static
+    {
+        $this->Duree = $Duree;
 
         return $this;
     }
